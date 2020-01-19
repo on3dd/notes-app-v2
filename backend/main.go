@@ -17,13 +17,21 @@ func main() {
 	router.Use(static.Serve("/", static.LocalFile("client/dist", true)))
 	router.LoadHTMLGlob("client/dist/*.html")
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+	// Pages router
+	pr := router.Group("/")
+	{
+		pr.GET("/", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", nil)
+		})
 
-	router.GET("/about", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+		pr.GET("/about", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", nil)
+		})
+
+		pr.GET("/upload", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", nil)
+		})
+	}
 
 	server := &http.Server{
 		Handler:      router,

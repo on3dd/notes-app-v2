@@ -31,22 +31,20 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>Конспекты</v-toolbar-title>
-
       <v-spacer/>
-
-      <v-btn color="primary" link nuxt
-             outlined tile
-             to="/login"
-      >
+      <v-btn color="primary" outlined tile to="/login">
         <v-icon class="mr-1">mdi-account-circle</v-icon>
         <span>Войти</span>
       </v-btn>
     </v-app-bar>
 
-    <v-content>
-      <div style="min-height: 100vh;">
+    <v-content class="router-view">
+      <v-row class="d-flex justify-center">
         <router-view/>
-      </div>
+      </v-row>
+    </v-content>
+
+    <v-content class="pt-0">
       <Footer/>
     </v-content>
   </v-app>
@@ -74,6 +72,10 @@
 </script>
 
 <style>
+  .router-view {
+    min-height: 100vh;
+  }
+
   .v-list-item--active .v-icon {
     color: #1976d2 !important;
   }
