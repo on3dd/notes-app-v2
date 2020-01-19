@@ -5,7 +5,7 @@ CREATE TABLE "notes" (
 	"teacher_id" int NOT NULL,
 	"title" TEXT NOT NULL,
 	"description" TEXT,
-	"posted_at" TIMESTAMP NOT NULL,
+	"posted_at" TIMESTAMP WITH TIME ZONE NOT NULL,
 	"link" TEXT NOT NULL UNIQUE,
 	CONSTRAINT "notes_pk" PRIMARY KEY ("id")
 ) WITH (
