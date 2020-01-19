@@ -11,8 +11,8 @@ func NewRouter() *gin.Engine {
 
 	router.Use(gin.Logger())
 
-	router.Use(static.Serve("/", static.LocalFile("../client/dist", true)))
-	router.LoadHTMLGlob("../client/dist/*.html")
+	router.Use(static.Serve("/", static.LocalFile("../frontend/dist", true)))
+	router.LoadHTMLGlob("../frontend/dist/*.html")
 
 	// Pages router
 	pr := router.Group("/")
