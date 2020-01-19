@@ -26,3 +26,17 @@ func (api *API) GetCategory(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
 }
+
+func (api *API) GetCategories(c *gin.Context) {
+	var categories []Category
+	api.db.Order("id asc").Find(&categories)
+
+	if len(categories) == 0 {
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+
+	if err := json.NewEncoder(c.Writer).Encode(categories); err != nil {
+		log.Printf("Cannot encode category to JSON, error: %v\n", err)
+	}
+}
+

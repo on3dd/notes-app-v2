@@ -42,6 +42,13 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		apiRouter.GET("notes/:id", api.GetNote)
 
 		apiRouter.GET("users/:id", api.GetUser)
+
+		apiRouter.GET("categories", api.GetCategories)
+		apiRouter.GET("categories/:id", api.GetCategory)
+
+		apiRouter.GET("subjects/:id", api.GetSubject)
+
+		apiRouter.GET("teachers/:id", api.GetTeacher)
 	}
 
 	return router
