@@ -1,12 +1,16 @@
 package main
 
 import (
+	"net/http"
+
+	"notes-app-v2/backend/api"
+
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/jinzhu/gorm"
 )
 
-func NewRouter() *gin.Engine {
+func NewRouter(db *gorm.DB) *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Logger())
@@ -14,21 +18,38 @@ func NewRouter() *gin.Engine {
 	router.Use(static.Serve("/", static.LocalFile("../frontend/dist", true)))
 	router.LoadHTMLGlob("../frontend/dist/*.html")
 
-	// Pages router
-	pr := router.Group("/")
+	pageRouter := router.Group("/")
 	{
-		pr.GET("/", func(c *gin.Context) {
+		pageRouter.GET("/", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", nil)
 		})
 
-		pr.GET("/about", func(c *gin.Context) {
+		pageRouter.GET("/about", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", nil)
 		})
 
-		pr.GET("/upload", func(c *gin.Context) {
+		pageRouter.GET("/upload", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", nil)
 		})
 	}
 
+	api := api.New(db)
+
+	apiRouter := router.Group("/api/v1/")
+	{
+		apiRouter.Use(HeadersMiddleware())
+
+		apiRouter.GET("notes/:id", api.GetNote)
+
+		apiRouter.GET("users/:id", api.GetUser)
+	}
+
 	return router
+}
+
+func HeadersMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "application/json")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	}
 }

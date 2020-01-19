@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	router := NewRouter()
+	db := NewDatabase()
+
+	router := NewRouter(db)
 
 	server := &http.Server{
 		Handler:      router,
