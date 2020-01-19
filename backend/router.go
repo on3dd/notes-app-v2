@@ -39,15 +39,20 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 	{
 		apiRouter.Use(HeadersMiddleware())
 
+		apiRouter.GET("notes", api.GetNotes)
 		apiRouter.GET("notes/:id", api.GetNote)
+		apiRouter.POST("notes", api.AddNote)
 
+		apiRouter.GET("users", api.GetUsers)
 		apiRouter.GET("users/:id", api.GetUser)
 
 		apiRouter.GET("categories", api.GetCategories)
 		apiRouter.GET("categories/:id", api.GetCategory)
 
+		apiRouter.GET("subjects", api.GetSubjects)
 		apiRouter.GET("subjects/:id", api.GetSubject)
 
+		apiRouter.GET("teachers", api.GetTeachers)
 		apiRouter.GET("teachers/:id", api.GetTeacher)
 	}
 

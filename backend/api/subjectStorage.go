@@ -2,10 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (api *API) GetSubject(c *gin.Context) {
@@ -20,6 +21,7 @@ func (api *API) GetSubject(c *gin.Context) {
 
 		if err := json.NewEncoder(c.Writer).Encode(subject); err != nil {
 			log.Printf("Cannot encode subject to JSON, error: %v\n", err)
+			c.AbortWithStatus(http.StatusInternalServerError)
 		}
 	} else {
 		// If an invalid article ID is specified in the URL, abort with an error
@@ -27,4 +29,15 @@ func (api *API) GetSubject(c *gin.Context) {
 	}
 }
 
+func (api *API) GetSubjects(c *gin.Context) {
+	var subjects []Subject
+	api.db.Order("id asc").Find(&subjects)
 
+	if len(subjects) == 0 {
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+
+	if err := json.NewEncoder(c.Writer).Encode(subjects); err != nil {
+		log.Printf("Cannot encode subjects to JSON, error: %v\n", err)
+	}
+}

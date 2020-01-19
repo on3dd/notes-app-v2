@@ -2,10 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (api *API) GetCategory(c *gin.Context) {
@@ -36,7 +37,8 @@ func (api *API) GetCategories(c *gin.Context) {
 	}
 
 	if err := json.NewEncoder(c.Writer).Encode(categories); err != nil {
-		log.Printf("Cannot encode category to JSON, error: %v\n", err)
+		log.Printf("Cannot encode categories to JSON, error: %v\n", err)
+		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
 
