@@ -72,6 +72,10 @@
 </script>
 
 <style>
+  body {
+    overflow-x: hidden;
+  }
+
   .router-view {
     min-height: 100vh;
   }

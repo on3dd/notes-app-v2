@@ -2,48 +2,49 @@
   <v-container>
     <v-form
         id="form"
-        v-model="valid"
         lazy-validation
         onsubmit="return false;"
+        v-model="valid"
     >
       <span class="display-2 display-sm-3 text-center d-block mb-3">Загрузка работы</span>
       <v-text-field
-          v-model="title" :rules="titleRules" label="Название" required name="title"
+          :rules="titleRules" label="Название" name="title" required v-model="title"
       ></v-text-field>
 
       <v-textarea
-          v-model="description" :rules="descriptionRules" label="Описание" hint="Введите описание работы" name="descirption"
+          :rules="descriptionRules" hint="Введите описание работы" label="Описание" name="descirption"
+          v-model="description"
       ></v-textarea>
 
       <v-file-input
-          v-model="file" :rules="fileRules" label="Файлы" accept="application/pdf" required name="file"
+          :rules="fileRules" accept="application/pdf" label="Файлы" name="file" required v-model="file"
       ></v-file-input>
 
       <v-select
-          v-model="category" :rules="categoryRules" :items="categories" item-text="name" label="Категория"
-          required name="category" @change="getSubjects"
+          :items="categories" :rules="categoryRules" @change="getSubjects" item-text="name" label="Категория"
+          name="category" required v-model="category"
       ></v-select>
 
       <v-select
-          v-model="subject" :rules="subjectRules" :items="subjects" item-text="name" label="Предмет"
-          required name="subject" @change="getTeachers"
+          :items="subjects" :rules="subjectRules" @change="getTeachers" item-text="name" label="Предмет"
+          name="subject" required v-model="subject"
       ></v-select>
 
       <v-select
-          v-model="teacher" :rules="teacherRules" :items="teachers" item-text="name" label="Преподаватель"
-          required name="teacher"
+          :items="teachers" :rules="teacherRules" item-text="name" label="Преподаватель" name="teacher"
+          required v-model="teacher"
       ></v-select>
 
       <v-checkbox
-          v-model="checkbox"
           :rules="[v => !!v || 'Вы должны принять условия пользования!']"
           label="Я согласен с условиями пользования сервисом"
           required
+          v-model="checkbox"
       ></v-checkbox>
 
       <div class="d-flex justify-center">
         <v-btn
-            large color="success" class="mx-4" :disabled="!valid" type="submit" @click="this.submit"
+            :disabled="!valid" @click="this.submit" class="mx-4" color="success" large type="submit"
         >
           Отправить
         </v-btn>
@@ -95,64 +96,53 @@
     }),
 
     methods: {
-      getCategories: function() {
-        axios.get('http://localhost:8080/api/v1/categories')
-            .then(response => {
-              this.categories = response.data
+      getCategories: async function () {
+        const response = await axios.get('http://localhost:8080/api/v1/categories')
 
-              this.subjects = []
-              this.subject = ''
+        this.categories = response.data
 
-              this.teachers = []
-              this.teacher = ''
-            })
-            .catch(err => {
-              console.error(err)
-            })
+        this.subjects = []
+        this.subject = ''
+
+        this.teachers = []
+        this.teacher = ''
       },
-      getSubjects: function() {
+      getSubjects: async function () {
         let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
         if (categoryIdx == -1) return false
         // console.log("subject id = ", this.categories[categoryIdx].subject)
-        axios.get("http://localhost:8080/api/v1/subjects", {
+
+        const response = await axios.get("http://localhost:8080/api/v1/subjects", {
           params: {
             id: this.categories[categoryIdx].subject
           }
         })
-            .then(response => {
-              this.subjects = response.data
-              this.subject = ''
 
-              this.teachers = []
-              this.teacher = ''
-            })
-            .catch(err => {
-              console.error(err)
-            })
+        this.subjects = response.data
+        this.subject = ''
+
+        this.teachers = []
+        this.teacher = ''
       },
-      getTeachers: function() {
+      getTeachers: async function () {
         let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
         if (subjectIdx == -1) return false
         // console.log("teacher id = ", this.subjects[subjectIdx].id)
-        axios.get("http://localhost:8080/api/v1/teachers", {
+        const response = await axios.get("http://localhost:8080/api/v1/teachers", {
           params: {
             id: this.subjects[subjectIdx].id
           }
         })
-            .then(response => {
-              this.teachers = response.data
-              this.teacher = ''
-            })
-            .catch(err => {
-              console.error(err)
-            })
+
+        this.teachers = response.data
+        this.teacher = ''
       },
-      submit: function () {
+      submit: async function () {
         let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
         if (categoryIdx == -1) return console.error("Error: Categories are empty!");
 
         let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
-        if (subjectIdx == -1) return console.error("Error: Subjects are empty!");;
+        if (subjectIdx == -1) return console.error("Error: Subjects are empty!");
 
         let data = new FormData()
 
@@ -165,15 +155,11 @@
         data.append("description", this.description)
         data.append("file", this.file)
 
-        axios.post("http://localhost:8080/api/v1/notes", data)
-            .then(response => {
-              if (response.status == 200) {
-                this.$nuxt.$router.replace({ path: `/notes/${response.data.id}`})
-              }
-            })
-            .catch(err => {
-              console.error(err)
-            })
+        const response = await axios.post("http://localhost:8080/api/v1/notes", data)
+
+        if (response.status == 200) {
+          this.$router.replace({path: `/notes/${response.data.id}`})
+        }
       }
     },
     created() {
