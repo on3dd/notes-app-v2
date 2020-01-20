@@ -21,17 +21,17 @@
       ></v-file-input>
 
       <v-select
-          :items="categories" :rules="categoryRules" @change="getSubjects" item-text="name" label="Категория"
+          :items="allCategories" :rules="categoryRules" @change="fetchSubjects(category)" item-text="name" label="Категория"
           name="category" required v-model="category"
       ></v-select>
 
       <v-select
-          :items="subjects" :rules="subjectRules" @change="getTeachers" item-text="name" label="Предмет"
+          :items="allSubjects" :rules="subjectRules" @change="fetchTeachers(subject)" item-text="name" label="Предмет"
           name="subject" required v-model="subject"
       ></v-select>
 
       <v-select
-          :items="teachers" :rules="teacherRules" item-text="name" label="Преподаватель" name="teacher"
+          :items="allTeachers" :rules="teacherRules" item-text="name" label="Преподаватель" name="teacher"
           required v-model="teacher"
       ></v-select>
 
@@ -55,12 +55,18 @@
 
 <script>
   import axios from 'axios'
+  import {mapActions, mapGetters} from 'vuex'
 
   export default {
     name: "UploadForm",
     data: () => ({
-      valid: false,
       title: '',
+      description: '',
+      category: '',
+      subject: '',
+      teacher: '',
+
+      valid: false,
       titleRules: [
         v => !!v || 'Поле должно быть заполнено',
         v => (v && v.length >= 10) || 'Название должно содержать как минимум 10 символов',
@@ -71,78 +77,31 @@
         v => !!v || "Поле должно быть заполнено"
       ],
 
-      description: '',
       descriptionRules: [],
 
-      category: '',
       categoryRules: [
         v => !!v || 'Поле должно быть заполнено',
       ],
-      categories: ["Выберите категорию"],
 
-      subject: '',
       subjectRules: [
         v => !!v || 'Поле должно быть заполнено',
       ],
-      subjects: ["Выберите предмет"],
 
-      teacher: '',
       teacherRules: [
         v => !!v || 'Поле должно быть заполнено',
       ],
-      teachers: ["Выберите преподавателя"],
 
       checkbox: false,
     }),
 
     methods: {
-      getCategories: async function () {
-        const response = await axios.get('http://localhost:8080/api/v1/categories')
-
-        this.categories = response.data
-
-        this.subjects = []
-        this.subject = ''
-
-        this.teachers = []
-        this.teacher = ''
-      },
-      getSubjects: async function () {
-        let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
-        if (categoryIdx == -1) return false
-        // console.log("subject id = ", this.categories[categoryIdx].subject)
-
-        const response = await axios.get("http://localhost:8080/api/v1/subjects", {
-          params: {
-            id: this.categories[categoryIdx].subject
-          }
-        })
-
-        this.subjects = response.data
-        this.subject = ''
-
-        this.teachers = []
-        this.teacher = ''
-      },
-      getTeachers: async function () {
-        let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
-        if (subjectIdx == -1) return false
-        // console.log("teacher id = ", this.subjects[subjectIdx].id)
-        const response = await axios.get("http://localhost:8080/api/v1/teachers", {
-          params: {
-            id: this.subjects[subjectIdx].id
-          }
-        })
-
-        this.teachers = response.data
-        this.teacher = ''
-      },
+      ...mapActions(["fetchCategories", "fetchSubjects", "fetchTeachers"]),
       submit: async function () {
-        let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
-        if (categoryIdx == -1) return console.error("Error: Categories are empty!");
+        const categoryIdx = this.getCategoryIndex
+        if (categoryIdx === -1) return console.error("Error: Categories are empty!");
 
-        let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
-        if (subjectIdx == -1) return console.error("Error: Subjects are empty!");
+        const subjectIdx = this.getSubjectIndex
+        if (subjectIdx === -1) return console.error("Error: Subjects are empty!");
 
         let data = new FormData()
 
@@ -162,8 +121,17 @@
         }
       }
     },
-    created() {
-      this.getCategories()
+    computed: {
+      ...mapGetters(["allCategories", "allSubjects", "allTeachers"]),
+      getCategoryIndex() {
+        return this.$store.getters.getCategoryIndex(this.category)
+      },
+      getSubjectIndex() {
+        return this.$store.getters.getSubjectIndex(this.subject)
+      },
+    },
+    async mounted() {
+      await this.fetchCategories()
     }
   }
 
