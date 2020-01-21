@@ -3,6 +3,7 @@
       class="my-12">
     <v-row
         class="mx-md-6 px-2" justify="center" no-gutters>
+      <!--    Modal    -->
       <v-dialog
           max-width="350" v-model="dialog">
         <v-card>
@@ -28,7 +29,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
       <v-col :lg="6" :md="8" :sm="10" class="px-2">
+        <!--    Title    -->
         <div class="mb-3">
           <v-text-field
               class="display-2 display-3 note-title"
@@ -42,6 +45,7 @@
           >{{ getNote.title }}</span>
         </div>
 
+        <!--    Description    -->
         <div class="mb-2">
           <v-textarea
               class="headline note-description"
@@ -64,6 +68,7 @@
           <span class="d-block font-weight-light">{{ getNote.posted_at }}</span>
         </div>
 
+        <!--    Details    -->
         <div>
           <span class="title mb-2 d-block font-weight-regular">Предмет:
             <a class="subject" href="">{{subject.name}}</a>
@@ -73,6 +78,7 @@
           </span>
         </div>
 
+        <!--    Toolkit    -->
         <div class="my-6">
           <v-btn class="d-sm-inline-block mr-1" color="primary" :disabled="!getNote.link" x-large>
             <a :href="getNote.link" style="color:white;text-decoration:none;">Отрыть</a>
@@ -128,6 +134,11 @@
               </v-btn>
             </div>
           </div>
+        </div>
+
+        <!--    Pdf previewer    -->
+        <div>
+          <object id="pdf-previewer" :data="getNote.link" type="application/pdf"/>
         </div>
       </v-col>
     </v-row>
@@ -185,6 +196,10 @@
   .note-title, .note-description {
     padding: 0 !important;
     margin: 0 !important;
+  }
+  #pdf-previewer {
+    width: 100%;
+    height: 600px;
   }
 </style>
 <style>
