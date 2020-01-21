@@ -71,7 +71,7 @@
         <!--    Details    -->
         <div>
           <span class="title mb-2 d-block font-weight-regular">Предмет:
-            <a class="subject" href="">{{subject.name}}</a>
+            <a class="subject" href="">{{getSubject.name}}</a>
           </span>
           <span class="title mb-2 d-block font-weight-regular">Преподаватель:
             <a class="teacher" href="">{{getTeacher.name}}</a>
@@ -152,10 +152,6 @@
     name: "NoteItem",
     data() {
       return {
-        subject: {
-          name: "Неизвестный предмет"
-        },
-
         isEditing: false,
         noteTitleInput: '',
         noteDescriptionInput: '',

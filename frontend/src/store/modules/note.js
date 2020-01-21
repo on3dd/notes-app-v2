@@ -16,9 +16,11 @@ export default {
       const response = await axios.get(`http://localhost:8080/api/v1/notes/${id}`)
 
       const note = response.data
+
       commit("updateNote", note)
       dispatch("fetchAuthor", note.author_id)
-      dispatch("fetchCategory", note.author_id)
+      dispatch("fetchCategory", note.category_id)
+      dispatch("fetchSubject", note.subject_id)
       dispatch("fetchTeacher", note.teacher_id)
     },
     async fetchAuthor({commit}, id) {
@@ -27,12 +29,11 @@ export default {
       const author = response.data
       commit("updateAuthor", author)
     },
-    async fetchCategory({commit, dispatch}, id) {
+    async fetchCategory({commit}, id) {
       const response = await axios.get(`http://localhost:8080/api/v1/categories/${id}`)
 
       const category = response.data
       commit("updateCategory", category)
-      dispatch("fetchSubject", category.subject)
     },
     async fetchSubject({commit}, id) {
       const response = await axios.get(`http://localhost:8080/api/v1/subjects/${id}`)
@@ -89,7 +90,7 @@ export default {
     getNote: state => state.note,
     getAuthor: state => state.author,
     getCategory: state => state.category,
-    getSubject: state => state.subjects,
+    getSubject: state => state.subject,
     getTeacher: state => state.teacher
   }
 }
