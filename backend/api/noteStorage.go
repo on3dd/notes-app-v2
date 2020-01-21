@@ -54,6 +54,7 @@ func (api *API) AddNote(c *gin.Context) {
 	var note Note
 	note.AuthorId, _ = strconv.Atoi(c.Request.FormValue("author"))
 	note.CategoryId, _ = strconv.Atoi(c.Request.FormValue("category_id"))
+	note.SubjectId, _ = strconv.Atoi(c.Request.FormValue("subject_id"))
 	note.TeacherId, _ = strconv.Atoi(c.Request.FormValue("teacher_id"))
 	note.Title = c.Request.FormValue("title")
 	note.Description = c.Request.FormValue("description")

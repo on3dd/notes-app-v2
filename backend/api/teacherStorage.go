@@ -31,7 +31,13 @@ func (api *API) GetTeacher(c *gin.Context) {
 
 func (api *API) GetTeachers(c *gin.Context) {
 	var teachers []Teacher
-	api.db.Order("id asc").Find(&teachers)
+
+	if keys := c.Request.URL.Query()["category_id"]; len(keys[0]) != 0 {
+		api.db.Joins("inner join categories on categories.id = teachers.category_id").
+			Where("categories.id = ?", keys[0]).Find(&teachers)
+	} else {
+		api.db.Order("id asc").Find(&teachers)
+	}
 
 	if len(teachers) == 0 {
 		c.AbortWithStatus(http.StatusNotFound)

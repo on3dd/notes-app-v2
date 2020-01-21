@@ -18,25 +18,11 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 	router.Use(static.Serve("/", static.LocalFile("../frontend/dist", true)))
 	router.LoadHTMLGlob("../frontend/dist/*.html")
 
+	pageRoutes := []string{"/", "/about", "/upload", "/notes", "/notes/:id"}
+
 	pageRouter := router.Group("/")
-	{
-		pageRouter.GET("/", func(c *gin.Context) {
-			c.HTML(http.StatusOK, "index.html", nil)
-		})
-
-		pageRouter.GET("/about", func(c *gin.Context) {
-			c.HTML(http.StatusOK, "index.html", nil)
-		})
-
-		pageRouter.GET("/upload", func(c *gin.Context) {
-			c.HTML(http.StatusOK, "index.html", nil)
-		})
-
-		pageRouter.GET("/notes", func(c *gin.Context) {
-			c.HTML(http.StatusOK, "index.html", nil)
-		})
-
-		pageRouter.GET("/notes/:id", func(c *gin.Context) {
+	for _, route := range pageRoutes {
+		pageRouter.GET(route, func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", nil)
 		})
 	}

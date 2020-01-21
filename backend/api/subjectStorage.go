@@ -31,7 +31,13 @@ func (api *API) GetSubject(c *gin.Context) {
 
 func (api *API) GetSubjects(c *gin.Context) {
 	var subjects []Subject
-	api.db.Order("id asc").Find(&subjects)
+
+	if keys := c.Request.URL.Query()["category_id"]; len(keys[0]) != 0 {
+		api.db.Joins("inner join categories on categories.id = subjects.category_id").
+			Where("categories.id = ?", keys[0]).Find(&subjects)
+	} else {
+		api.db.Order("id asc").Find(&subjects)
+	}
 
 	if len(subjects) == 0 {
 		c.AbortWithStatus(http.StatusNotFound)
