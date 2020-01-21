@@ -57,7 +57,7 @@ func (api *API) AddNote(c *gin.Context) {
 	note.SubjectId, _ = strconv.Atoi(c.Request.FormValue("subject_id"))
 	note.TeacherId, _ = strconv.Atoi(c.Request.FormValue("teacher_id"))
 	note.Title = c.Request.FormValue("title")
-	note.Description = c.Request.FormValue("description")
+	note.Descirption = c.Request.FormValue("description")
 
 	file, handler, err := c.Request.FormFile("file")
 	if err != nil {

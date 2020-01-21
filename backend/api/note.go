@@ -10,6 +10,6 @@ type Note struct {
 	TeacherId   int       `json:"teacher_id,omitempty"`
 	PostedAt    time.Time `json:"posted_at,omitempty"`
 	Title       string    `json:"title,omitempty"`
-	Description string    `json:"description,omitempty"`
+	Descirption string    `json:"description,omitempty"` // TODO: change it back to description
 	Link        string    `json:"link,omitempty"`
 }

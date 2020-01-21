@@ -8,36 +8,38 @@ export default {
       const categories = response.data
       commit("updateCategories", categories)
     },
-    async fetchSubjects({commit, getters}, category) {
+    async fetchData({commit, dispatch}, category) {
       commit("updateCategory", category)
+
+      dispatch("fetchSubjects")
+      dispatch("fetchTeachers")
+    },
+    async fetchSubjects({commit, getters}) {
+      // commit("updateCategory", category)
 
       const categories = getters.allCategories
       const categoryIdx = getters.getCategoryIndex
 
       const response = await axios.get("http://localhost:8080/api/v1/subjects", {
-        params: {
-          id: categories[categoryIdx].subject
-        }
+        params: { category_id: categories[categoryIdx].id }
       })
 
       const subjects = response.data
       commit("updateSubjects", subjects)
     },
-    async fetchTeachers({commit, getters}, subject) {
-      commit("updateSubject", subject)
+    async fetchTeachers({commit, getters}) {
+      // commit("updateCategory", category)
 
-      const subjects = getters.allSubjects
-      const subjectIdx = getters.getSubjectIndex
+      const categories = getters.allCategories
+      const categoryIdx = getters.getCategoryIndex
 
       const response = await axios.get("http://localhost:8080/api/v1/teachers", {
-        params: {
-          id: subjects[subjectIdx].id
-        }
+        params: { category_id: categories[categoryIdx].id }
       })
 
       const teachers = response.data
       commit("updateTeachers", teachers)
-    }
+    },
   },
   mutations: {
     updateCategories(state, categories) {
@@ -53,6 +55,7 @@ export default {
     updateTeachers(state, teachers) {
       state.teachers = teachers
     },
+
     updateCategory(state, category) {
       state.category = category
     },
@@ -74,20 +77,18 @@ export default {
 
   },
   getters: {
-    allCategories(state) {
-      return state.categories
-    },
-    allSubjects(state) {
-      return state.subjects
-    },
-    allTeachers(state) {
-      return state.teachers
-    },
+    allCategories: state => state.categories,
+    allSubjects: state => state.subjects,
+    allTeachers: state => state.teachers,
+
     getCategoryIndex(state) {
       return state.categories.indexOf(state.categories.find(el => el.name === state.category))
     },
     getSubjectIndex(state) {
       return state.subjects.indexOf(state.subjects.find(el => el.name === state.subject))
+    },
+    getTeacherIndex(state) {
+      return state.teachers.indexOf(state.teachers.find(el => el.name === state.teacher))
     }
   }
 }
