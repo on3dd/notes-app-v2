@@ -31,6 +31,14 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		pageRouter.GET("/upload", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", nil)
 		})
+
+		pageRouter.GET("/notes", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", nil)
+		})
+
+		pageRouter.GET("/notes/:id", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", nil)
+		})
 	}
 
 	api := api.New(db)

@@ -16,7 +16,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer/>
 
             <v-btn @click="dialog = !dialog" color="grey" text>
               Отмена
@@ -34,23 +34,23 @@
               class="display-2 display-3 note-title"
               id="note-title" outlined
               placeholder="Название"
-              v-bind:class="{ 'd-none': !isEditing }" v-model="noteTitleInput"
-          ></v-text-field>
+              :class="{ 'd-none': !isEditing }" v-model="getNote.title"
+          />
           <span
-              class="d-block display-2 display-sm-3"
-              v-bind:class="{ 'd-none': isEditing }"
+              class="display-2 display-sm-3"
+              :class="{ 'd-none': isEditing }"
           >{{ getNote.title }}</span>
         </div>
 
         <div class="mb-2">
-          <v-text-field
+          <v-textarea
               class="headline note-description"
               id="note-description" outlined
-              placeholder="Описание"
-              v-bind:class="{ 'd-none': !isEditing }" v-model="noteDescriptionInput"
-          ></v-text-field>
+              placeholder="Описание" rows="4"
+              :class="{ 'd-none': !isEditing }" v-model="getNote.description"
+          />
           <span class="headline font-weight-regular"
-                v-bind:class="{ 'd-none': isEditing }"
+                :class="{ 'd-none': isEditing }"
           >{{getNote.description}}</span>
         </div>
         <div class="d-none d-md-block title mb-2">
@@ -74,17 +74,17 @@
         </div>
 
         <div class="my-6">
-          <v-btn class="d-sm-inline-block mr-1" color="primary" v-bind:disabled="!getNote.link" x-large>
+          <v-btn class="d-sm-inline-block mr-1" color="primary" :disabled="!getNote.link" x-large>
             <a :href="getNote.link" style="color:white;text-decoration:none;">Отрыть</a>
           </v-btn>
           <div class="d-inline-block" v-if="!isEditing">
             <div class="d-inline-block mr-1">
               <v-btn @click="editNote" class="d-none d-sm-inline-block"
-                     color="success" v-bind:disabled="!getNote.link" x-large>
+                     color="success" :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">Редактировать</a>
               </v-btn>
               <v-btn @click="editNote" class="d-sm-none my-2" color="success" style="min-width: 0;"
-                     v-bind:disabled="!getNote.link" x-large>
+                     :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">
                   <v-icon dark>mdi-pencil</v-icon>
                 </a>
@@ -92,11 +92,11 @@
             </div>
             <div class="d-inline-block mr-1">
               <v-btn @click="deleteNote" class="d-none d-sm-inline-block"
-                     color="error" v-bind:disabled="!getNote.link" x-large>
+                     color="error" :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">Удалить</a>
               </v-btn>
               <v-btn @click="deleteNote" class="d-sm-none my-2" color="error" style="min-width: 0;"
-                     v-bind:disabled="!getNote.link" x-large>
+                     :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">
                   <v-icon dark>mdi-delete</v-icon>
                 </a>
@@ -106,22 +106,22 @@
           <div class="d-inline-block" v-else>
             <div class="d-inline-block mr-1">
               <v-btn @click="updateNote" class="d-none d-sm-inline-block mr-1" color="success"
-                     v-bind:disabled="!getNote.link" x-large>
+                     :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">Сохранить</a>
               </v-btn>
               <v-btn @click="updateNote" class="d-sm-none my-2" color="success" style="min-width: 0;"
-                     v-bind:disabled="!getNote.link" x-large>
+                     :disabled="!getNote.link" x-large>
                 <a style="color:white;text-decoration:none;">
                   <v-icon dark>mdi-check</v-icon>
                 </a>
               </v-btn>
             </div>
             <div class="d-inline-block mr-1">
-              <v-btn @click="editNote" class="d-none d-sm-inline-block mr-1" v-bind:disabled="!getNote.link" x-large>
+              <v-btn @click="editNote" class="d-none d-sm-inline-block mr-1" :disabled="!getNote.link" x-large>
                 <a style="color:inherit;text-decoration:none;">Отмена</a>
               </v-btn>
               <v-btn @click="editNote" class="d-sm-none my-2" style="min-width: 0;"
-                     v-bind:disabled="!getNote.link" x-large>
+                     :disabled="!getNote.link" x-large>
                 <a style="color:inherit;text-decoration:none;">
                   <v-icon dark>mdi-cancel</v-icon>
                 </a>
@@ -143,9 +143,6 @@
       return {
         subject: {
           name: "Неизвестный предмет"
-        },
-        teacher: {
-          name: "Неизвестный преподаватель"
         },
 
         isEditing: false,

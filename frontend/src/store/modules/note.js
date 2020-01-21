@@ -1,5 +1,15 @@
 import axios from "axios";
 
+const options = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timezone: 'UTC',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric'
+};
+
 export default {
   actions: {
     async fetchNote({commit, dispatch}, id) {
@@ -39,6 +49,9 @@ export default {
   },
   mutations: {
     updateNote(state, note) {
+      const timestamp = Date.parse(note.posted_at)
+      note.posted_at = new Date(timestamp).toLocaleString("ru", options)
+
       state.note = note
     },
     updateAuthor(state, author) {
