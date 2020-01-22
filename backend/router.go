@@ -33,9 +33,12 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 	{
 		apiRouter.Use(HeadersMiddleware())
 
+		apiRouter.OPTIONS("notes/:id", OptionsHandler)
+
 		apiRouter.GET("notes", api.GetNotes)
 		apiRouter.GET("notes/:id", api.GetNote)
 		apiRouter.POST("notes", api.AddNote)
+		apiRouter.PUT("notes/:id", api.UpdateNote)
 
 		apiRouter.GET("users", api.GetUsers)
 		apiRouter.GET("users/:id", api.GetUser)
@@ -58,4 +61,8 @@ func HeadersMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Content-Type", "application/json")
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	}
+}
+
+func OptionsHandler(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 }

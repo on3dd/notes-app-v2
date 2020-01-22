@@ -97,3 +97,26 @@ func (api *API) AddNote(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
+
+func (api *API) UpdateNote(c *gin.Context) {
+	if id, err := strconv.Atoi(c.Param("id")); err == nil {
+		var note Note
+		api.db.Where("id = ?", id).First(&note)
+
+		if note.Id == 0 {
+			c.AbortWithStatus(http.StatusNotFound)
+		}
+
+		note.Title = c.Request.FormValue("title")
+		note.Descirption = c.Request.FormValue("description")
+
+		api.db.Save(&note)
+
+		if err := json.NewEncoder(c.Writer).Encode(note); err != nil {
+			log.Printf("Cannot encode note to JSON, error: %v\n", err)
+		}
+	} else {
+		// If an invalid article ID is specified in the URL, abort with an error
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+}

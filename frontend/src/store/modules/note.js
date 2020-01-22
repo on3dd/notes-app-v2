@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from '@/router'
 
 const options = {
   year: 'numeric',
@@ -47,6 +48,19 @@ export default {
       const teacher = response.data
       commit("updateTeacher", teacher)
     },
+    async changeNoteDetails({commit}, {title, description}) {
+      const data = new FormData()
+      data.append("title", title)
+      data.append("description", description)
+
+      axios.put(`http://localhost:8080/api/v1/notes/${router.currentRoute.params.id}`, data)
+          .then(response => {
+            commit("updateNoteDetails", {title: response.data.title, description: response.data.description})
+          })
+          .catch(err => {
+            console.error(err)
+          })
+    }
   },
   mutations: {
     updateNote(state, note) {
@@ -54,6 +68,10 @@ export default {
       note.posted_at = new Date(timestamp).toLocaleString("ru", options)
 
       state.note = note
+    },
+    updateNoteDetails(state, {title, description}) {
+      state.note.title = title
+      state.note.description = description
     },
     updateAuthor(state, author) {
       state.author = author
@@ -67,7 +85,6 @@ export default {
     updateTeacher(state, teacher) {
       state.teacher = teacher
     },
-
   },
   state: {
     note: {

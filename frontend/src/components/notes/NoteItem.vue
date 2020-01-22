@@ -37,7 +37,7 @@
               class="display-2 display-3 note-title"
               id="note-title" outlined
               placeholder="Название"
-              :class="{ 'd-none': !isEditing }" v-model="getNote.title"
+              :class="{ 'd-none': !isEditing }" v-model="noteTitleInput"
           />
           <span
               class="display-2 display-sm-3"
@@ -51,7 +51,7 @@
               class="headline note-description"
               id="note-description" outlined
               placeholder="Описание" rows="4"
-              :class="{ 'd-none': !isEditing }" v-model="getNote.description"
+              :class="{ 'd-none': !isEditing }" v-model="noteDescriptionInput"
           />
           <span class="headline font-weight-regular"
                 :class="{ 'd-none': isEditing }"
@@ -80,18 +80,18 @@
 
         <!--    Toolkit    -->
         <div class="my-6">
-          <v-btn class="d-sm-inline-block mr-1" color="primary" :disabled="!getNote.link" x-large>
-            <a :href="getNote.link" style="color:white;text-decoration:none;">Отрыть</a>
+          <v-btn class="d-sm-inline-block mr-2" color="primary" :disabled="!getNote.link" x-large>
+            <a :href="getNote.link" style="color:white;text-decoration:none;" title="Открыть в данной вкладке">Открыть</a>
           </v-btn>
           <div class="d-inline-block" v-if="!isEditing">
-            <div class="d-inline-block mr-1">
+            <div class="d-inline-block mr-2">
               <v-btn @click="editNote" class="d-none d-sm-inline-block"
                      color="success" :disabled="!getNote.link" x-large>
-                <a style="color:white;text-decoration:none;">Редактировать</a>
+                <a style="color:white;text-decoration:none;" title="Редактировать запись">Редактировать</a>
               </v-btn>
               <v-btn @click="editNote" class="d-sm-none my-2" color="success" style="min-width: 0;"
                      :disabled="!getNote.link" x-large>
-                <a style="color:white;text-decoration:none;">
+                <a style="color:white;text-decoration:none;" title="Редактировать запись">
                   <v-icon dark>mdi-pencil</v-icon>
                 </a>
               </v-btn>
@@ -99,11 +99,11 @@
             <div class="d-inline-block mr-1">
               <v-btn @click="deleteNote" class="d-none d-sm-inline-block"
                      color="error" :disabled="!getNote.link" x-large>
-                <a style="color:white;text-decoration:none;">Удалить</a>
+                <a style="color:white;text-decoration:none;" title="Удалить запись">Удалить</a>
               </v-btn>
               <v-btn @click="deleteNote" class="d-sm-none my-2" color="error" style="min-width: 0;"
                      :disabled="!getNote.link" x-large>
-                <a style="color:white;text-decoration:none;">
+                <a style="color:white;text-decoration:none;" title="Удалить запись">
                   <v-icon dark>mdi-delete</v-icon>
                 </a>
               </v-btn>
@@ -146,7 +146,7 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from "vuex";
+  import {mapActions, mapGetters, mapMutations} from "vuex";
 
   export default {
     name: "NoteItem",
@@ -159,11 +159,17 @@
       }
     },
     methods: {
-      ...mapActions(["fetchNote"]),
+      ...mapActions(["fetchNote", "changeNoteDetails"]),
       editNote: function () {
+        const note = this.getNote
+
+        this.noteTitleInput = note.title
+        this.noteDescriptionInput = note.description
+
         this.isEditing = !this.isEditing
       },
       updateNote: function () {
+        this.changeNoteDetails({title: this.noteTitleInput, description: this.noteDescriptionInput})
         this.isEditing = !this.isEditing
       },
       deleteNote: function () {
