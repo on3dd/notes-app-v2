@@ -53,6 +53,8 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 
 		apiRouter.GET("teachers", api.GetTeachers)
 		apiRouter.GET("teachers/:id", api.GetTeacher)
+
+		apiRouter.POST("join", api.SignUp)
 	}
 
 	return router

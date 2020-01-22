@@ -55,18 +55,20 @@
     }),
     methods: {
       submit: function () {
-        if (this.password != this.repeatPassword) {
+        if (this.password !== this.repeatPassword) {
           return console.log("Password does not match!")
         }
-        let data = new FormData()
+
+        const data = new FormData()
         data.append("name", this.username)
         data.append("email", this.email)
         data.append("about", this.about)
         data.append("password", this.password)
+
         axios.post("http://localhost:8080/api/v1/join", data)
             .then(response => {
-              if (response.status == 200) {
-                this.$nuxt.$router.replace({ path: `/users/${response.data.id}`})
+              if (response.status === 200) {
+                this.$router.replace({ path: "/login"})
               }
             })
             .catch(err => {
