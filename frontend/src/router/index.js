@@ -24,6 +24,14 @@ const routes = [
     path: "/notes/:id",
     name: "note",
     component: () => import("../views/notes/Note.vue")
+  }, {
+    path: "/login",
+    name: "login",
+    component: () => import("../views/Login.vue")
+  }, {
+    path: "/join",
+    name: "join",
+    component: () => import("../views/Join.vue")
   },
 ];
 
