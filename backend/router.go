@@ -40,6 +40,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		apiRouter.GET("notes/:id", api.GetNote)
 		apiRouter.POST("notes", api.AddNote)
 		apiRouter.PUT("notes/:id", api.UpdateNote)
+		apiRouter.DELETE("notes/:id", api.DeleteNote)
 
 		apiRouter.GET("users", api.GetUsers)
 		apiRouter.GET("users/:id", api.GetUser)

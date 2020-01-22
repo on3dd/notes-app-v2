@@ -60,6 +60,15 @@ export default {
           .catch(err => {
             console.error(err)
           })
+    },
+    async removeNote() {
+      axios.delete(`http://localhost:8080/api/v1/notes/${router.currentRoute.params.id}`)
+          .then(response => {
+            router.replace({path: `/notes`})
+          })
+          .catch(err => {
+            console.error(err)
+          })
     }
   },
   mutations: {

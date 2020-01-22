@@ -27,7 +27,7 @@ func (api *API) GetNote(c *gin.Context) {
 		}
 	} else {
 		// If an invalid article ID is specified in the URL, abort with an error
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }
 
@@ -117,6 +117,18 @@ func (api *API) UpdateNote(c *gin.Context) {
 		}
 	} else {
 		// If an invalid article ID is specified in the URL, abort with an error
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
+}
+
+func (api *API) DeleteNote (c *gin.Context)  {
+	if id, err := strconv.Atoi(c.Param("id")); err == nil {
+		if err := api.db.Where("notes.id = ?", id).Delete(Note{}).Error; err != nil {
+			log.Printf("Error deleting note, error: %v\n", err)
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+	} else {
+		// If an invalid article ID is specified in the URL, abort with an error
+		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }

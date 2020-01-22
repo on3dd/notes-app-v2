@@ -159,7 +159,7 @@
       }
     },
     methods: {
-      ...mapActions(["fetchNote", "changeNoteDetails"]),
+      ...mapActions(["fetchNote", "changeNoteDetails", "removeNote"]),
       editNote: function () {
         const note = this.getNote
 
@@ -176,6 +176,7 @@
         this.dialog = !this.dialog
       },
       confirmDeletion: function () {
+        this.removeNote()
         this.dialog = !this.dialog
       }
     },
