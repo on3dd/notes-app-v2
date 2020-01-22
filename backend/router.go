@@ -5,6 +5,7 @@ import (
 
 	"notes-app-v2/backend/api"
 
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -15,10 +16,14 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 
 	router.Use(gin.Logger())
 
+	store := sessions.NewCookieStore([]byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
+
+
 	router.Use(static.Serve("/", static.LocalFile("../frontend/dist", true)))
 	router.LoadHTMLGlob("../frontend/dist/*.html")
 
-	pageRoutes := []string{"/", "/about", "/upload", "/notes", "/notes/:id"}
+	pageRoutes := []string{"/", "about", "upload", "notes", "notes/:id", "login", "join"}
 
 	pageRouter := router.Group("/")
 	for _, route := range pageRoutes {
@@ -55,6 +60,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		apiRouter.GET("teachers/:id", api.GetTeacher)
 
 		apiRouter.POST("join", api.SignUp)
+		apiRouter.POST("login", api.SignIn)
 	}
 
 	return router

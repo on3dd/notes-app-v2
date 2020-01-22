@@ -47,8 +47,8 @@
         data.append("password", this.password)
         axios.post("http://localhost:8080/api/v1/login", data)
             .then(response => {
-              if (response.status == 200) {
-                this.$nuxt.$router.replace({path: `/notes`})
+              if (response.status === 200) {
+                this.$router.replace({path: `/notes`})
               }
             })
             .catch(err => {
