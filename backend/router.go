@@ -35,7 +35,8 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 
 		apiRouter.OPTIONS("notes/:id", OptionsHandler)
 
-		apiRouter.GET("notes", api.GetNotes)
+		//apiRouter.GET("notes", api.GetNotes)
+		apiRouter.GET("notes", api.GetNoteCards)
 		apiRouter.GET("notes/:id", api.GetNote)
 		apiRouter.POST("notes", api.AddNote)
 		apiRouter.PUT("notes/:id", api.UpdateNote)
