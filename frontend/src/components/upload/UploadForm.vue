@@ -39,7 +39,7 @@
 
 <script>
   import axios from 'axios'
-  import {mapActions, mapGetters, mapMutations} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
 
   export default {
     name: "UploadForm",
