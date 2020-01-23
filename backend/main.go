@@ -9,7 +9,9 @@ import (
 func main() {
 	db := NewDatabase()
 
-	router := NewRouter(db)
+	var signingKey = []byte("secret")
+
+	router := NewRouter(db, signingKey)
 
 	server := &http.Server{
 		Handler:      router,

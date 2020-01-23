@@ -3,22 +3,21 @@ package main
 import (
 	"net/http"
 
-	"notes-app-v2/backend/api"
+	apipkg "notes-app-v2/backend/api"
 
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-func NewRouter(db *gorm.DB) *gin.Engine {
+func NewRouter(db *gorm.DB, sk []byte) *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Logger())
 
 	store := sessions.NewCookieStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
-
 
 	router.Use(static.Serve("/", static.LocalFile("../frontend/dist", true)))
 	router.LoadHTMLGlob("../frontend/dist/*.html")
@@ -32,7 +31,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		})
 	}
 
-	api := api.New(db)
+	api := apipkg.New(db, sk)
 
 	apiRouter := router.Group("/api/v1/")
 	{
