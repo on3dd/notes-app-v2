@@ -31,11 +31,19 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>Конспекты</v-toolbar-title>
+
       <v-spacer/>
-      <v-btn color="primary" outlined tile to="/login">
+
+      <v-btn v-if="!isLoggedIn" color="primary" outlined tile to="/login">
         <v-icon class="mr-1">mdi-account-circle</v-icon>
         <span>Войти</span>
       </v-btn>
+
+      <v-btn v-else color="primary" outlined tile to="/login">
+        <v-icon class="mr-1">mdi-account-circle</v-icon>
+        <span>Выйти</span>
+      </v-btn>
+
     </v-app-bar>
 
     <v-content class="router-view">
@@ -55,11 +63,9 @@
 
   export default {
     name: "App",
-
     components: {
       Footer
     },
-
     data: () => ({
       drawer: true,
       items: [
@@ -67,7 +73,28 @@
         {path: "/notes", icon: "mdi-folder-open", text: "Работы"},
         {path: "/users", icon: "mdi-account-group", text: "Пользователи"}
       ]
-    })
+    }),
+    computed : {
+      isLoggedIn : function(){ return this.$store.getters.isLoggedIn}
+    },
+    methods: {
+      logout: function () {
+        this.$store.dispatch('logout')
+            .then(() => {
+              this.$router.push('/login')
+            })
+      }
+    },
+    created() {
+      this.$http.interceptors.response.use(undefined, function (err) {
+        return new Promise(function (resolve, reject) {
+          if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+            this.$store.dispatch("logout")
+          }
+          throw err;
+        });
+      });
+    }
   };
 </script>
 

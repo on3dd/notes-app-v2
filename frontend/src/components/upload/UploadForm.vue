@@ -38,7 +38,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
@@ -113,7 +112,7 @@
         data.append("description", this.description)
         data.append("file", this.file)
 
-        const response = await axios.post("http://localhost:8080/api/v1/notes", data)
+        const response = await this.$http.post("http://localhost:8080/api/v1/notes", data)
 
         if (response.status === 200) {
           await this.$router.replace({path: `/notes/${response.data.id}`})

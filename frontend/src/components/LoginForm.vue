@@ -24,8 +24,6 @@
 
 
 <script>
-  import axios from "axios";
-
   export default {
     name: "LoginForm",
     data: () => ({
@@ -42,18 +40,9 @@
     }),
     methods: {
       submit: function () {
-        let data = new FormData()
-        data.append("name", this.username)
-        data.append("password", this.password)
-        axios.post("http://localhost:8080/api/v1/login", data)
-            .then(response => {
-              if (response.status === 200) {
-                this.$router.replace({path: `/notes`})
-              }
-            })
-            .catch(err => {
-              console.error(err)
-            })
+        this.$store.dispatch('login', { username: this.username, password: this.password })
+            .then(() => this.$router.push('/'))
+            .catch(err => console.log(err))
       }
     }
   };

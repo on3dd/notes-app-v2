@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import upload from "./modules/upload";
 import note from "./modules/note";
+import auth from "./modules/auth"
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     upload,
-    note
+    note,
+    auth
   }
 });

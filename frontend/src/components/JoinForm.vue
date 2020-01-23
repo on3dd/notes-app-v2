@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import axios from "axios";
   export default {
     name: "JoinForm",
     data: () => ({
@@ -59,21 +58,14 @@
           return console.log("Password does not match!")
         }
 
-        const data = new FormData()
-        data.append("name", this.username)
-        data.append("email", this.email)
-        data.append("about", this.about)
-        data.append("password", this.password)
-
-        axios.post("http://localhost:8080/api/v1/join", data)
-            .then(response => {
-              if (response.status === 200) {
-                this.$router.replace({ path: "/login"})
-              }
-            })
-            .catch(err => {
-              console.error(err)
-            })
+        this.$store.dispatch('register', {
+          username: this.username,
+          email: this.email,
+          about: this.about,
+          password: this.password
+        })
+            .then(() => this.$router.push('/'))
+            .catch(err => console.log(err))
       }
     },
   }
