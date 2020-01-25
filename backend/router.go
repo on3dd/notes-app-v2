@@ -38,6 +38,7 @@ func NewRouter(db *gorm.DB, sk []byte) *gin.Engine {
 		apiRouter.Use(HeadersMiddleware())
 
 		apiRouter.OPTIONS("notes/:id", OptionsHandler)
+		//apiRouter.OPTIONS("notes", OptionsHandler)
 
 		//apiRouter.GET("notes", api.GetNotes)
 		apiRouter.GET("notes", api.GetNoteCards)

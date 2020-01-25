@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-form
-        id="form"
-        lazy-validation
-        onsubmit="return false;"
-        v-model="valid">
+    <v-form id="form" lazy-validation onsubmit="return false;" v-model="valid">
       <span class="display-2 display-sm-3 text-center d-block mb-3">Загрузка работы</span>
       <v-text-field
           :rules="titleRules" label="Название" name="title" required v-model="title" />

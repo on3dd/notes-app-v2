@@ -10,6 +10,8 @@ import (
 func (api *API) GetNoteCards(c *gin.Context) {
 	var noteCards []NoteCard
 
+	// Doesn't works properly because of GORM limitations
+
 	searchItems := "notes.id, notes.author_id, users.name, notes.category_id, categories.name, notes.subject_id, subjects.name, " +
 		"notes.teacher_id, teachers.name, notes.posted_at, notes.title"
 
@@ -18,8 +20,7 @@ func (api *API) GetNoteCards(c *gin.Context) {
 		Joins("INNER JOIN categories ON notes.category_id = categories.id").
 		Joins("INNER JOIN subjects ON notes.subject_id = subjects.id").
 		Joins("INNER JOIN teachers ON notes.teacher_id = teachers.id").
-		Order("notes.posted_at DESC").
-		Scan(&noteCards).Error
+		Order("notes.posted_at DESC").Scan(&noteCards).Error
 
 	if err != nil {
 		log.Println(err)
