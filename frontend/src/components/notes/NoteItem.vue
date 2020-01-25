@@ -32,7 +32,7 @@
 
       <v-col :lg="6" :md="8" :sm="10" class="px-2">
         <!--    Title    -->
-        <div class="mb-3">
+        <div class="mb-3 text-capitalize">
           <v-text-field
               class="display-2 display-3 note-title"
               id="note-title" outlined
@@ -146,7 +146,7 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
 
   export default {
     name: "NoteItem",
