@@ -94,7 +94,12 @@
           throw err;
         });
       });
-    }
+    },
+    watch: {
+      '$route' (to, from) {
+        document.title = to.meta.title || 'Конспекты'
+      }
+    },
   };
 </script>
 
