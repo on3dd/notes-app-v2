@@ -49,10 +49,6 @@
 </script>
 
 <style>
-  .v-input__slot {
-    margin-bottom: 0 !important;
-  }
-
   .sign-up {
     text-align: left;
   }
