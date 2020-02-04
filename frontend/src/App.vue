@@ -34,15 +34,23 @@
 
       <v-spacer/>
 
-      <v-btn v-if="!isLoggedIn" color="primary" outlined tile to="/login">
-        <v-icon class="mr-1">mdi-account-circle</v-icon>
-        <span>Войти</span>
-      </v-btn>
+      <div v-if="!isLoggedIn">
+        <v-btn color="primary" outlined tile to="/login">
+          <v-icon class="mr-1">mdi-account-circle</v-icon>
+          <span>Войти</span>
+        </v-btn>
+      </div>
 
-      <v-btn v-else color="primary" outlined tile :to="`/users/${user_id}`">
-        <v-icon class="mr-1">mdi-account-circle</v-icon>
-        <span>{{user_name}}</span>
-      </v-btn>
+      <div v-else>
+        <v-btn :to="`/users/${user_id}`" color="primary" outlined tile class="mr-2" title="Перейти в профиль">
+          <v-icon class="mr-1">mdi-account-circle</v-icon>
+          <span>{{user_name}}</span>
+        </v-btn>
+
+        <v-btn @click="logout" tile icon color="primary" class="logout-btn" title="Выход">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </div>
 
     </v-app-bar>
 
@@ -74,18 +82,6 @@
         {path: "/users", icon: "mdi-account-group", text: "Пользователи"}
       ]
     }),
-    computed : {
-      isLoggedIn: function() { return this.$store.getters.isLoggedIn },
-      user: function() { return this.$store.getters.getUser },
-      user_name: function() {
-        const user_name = localStorage.getItem('user_name')
-        return user_name === null ? 'Аноним' : user_name
-      },
-      user_id: function() {
-        const user_id = localStorage.getItem('user_id')
-        return user_id === null ? '0' : user_id
-      },
-    },
     methods: {
       logout: function () {
         this.$store.dispatch('logout')
@@ -93,6 +89,22 @@
               this.$router.push('/login')
             })
       }
+    },
+    computed: {
+      isLoggedIn: function () {
+        return this.$store.getters.isLoggedIn
+      },
+      user: function () {
+        return this.$store.getters.getUser
+      },
+      user_name: function () {
+        const user_name = localStorage.getItem('user_name')
+        return user_name === null ? 'Аноним' : user_name
+      },
+      user_id: function () {
+        const user_id = localStorage.getItem('user_id')
+        return user_id === null ? '0' : user_id
+      },
     },
     created() {
       this.$http.interceptors.response.use(undefined, function (err) {
@@ -105,7 +117,7 @@
       });
     },
     watch: {
-      '$route' (to, from) {
+      '$route'(to, from) {
         document.title = to.meta.title || 'Конспекты'
       }
     },
@@ -123,5 +135,10 @@
 
   .v-list-item--active .v-icon {
     color: #1976d2 !important;
+  }
+
+  .logout-btn {
+    max-height: 36px;
+    max-width: 36px;
   }
 </style>
