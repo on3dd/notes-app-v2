@@ -39,9 +39,9 @@
         <span>Войти</span>
       </v-btn>
 
-      <v-btn v-else color="primary" outlined tile to="/login">
+      <v-btn v-else color="primary" outlined tile :to="`/users/${user_id}`">
         <v-icon class="mr-1">mdi-account-circle</v-icon>
-        <span>Выйти</span>
+        <span>{{user_name}}</span>
       </v-btn>
 
     </v-app-bar>
@@ -75,7 +75,16 @@
       ]
     }),
     computed : {
-      isLoggedIn : function(){ return this.$store.getters.isLoggedIn}
+      isLoggedIn: function() { return this.$store.getters.isLoggedIn },
+      user: function() { return this.$store.getters.getUser },
+      user_name: function() {
+        const user_name = localStorage.getItem('user_name')
+        return user_name === null ? 'Аноним' : user_name
+      },
+      user_id: function() {
+        const user_id = localStorage.getItem('user_id')
+        return user_id === null ? '0' : user_id
+      },
     },
     methods: {
       logout: function () {

@@ -17,9 +17,12 @@ export default {
               console.log(user)
 
               localStorage.setItem('token', token)
+              localStorage.setItem('user_name', user.name)
+              localStorage.setItem('user_id', user.id)
+
               axios.defaults.headers.common['Authorization'] = token
 
-              commit('auth_success', {token: token, user: user})
+              commit('auth_success', {token, user})
               resolve(response)
             })
             .catch(err => {
@@ -39,12 +42,15 @@ export default {
         data.append("about", about)
         data.append("password", password)
 
-        axios.post('http://localhost:3000/register', data)
+        axios.post('http://localhost:8080/api/v1/register', data)
             .then(response => {
               const token = response.data.token
               const user = response.data.user
 
               localStorage.setItem('token', token)
+              localStorage.setItem('user_name', user.name)
+              localStorage.setItem('user_id', user.id)
+
               axios.defaults.headers.common['Authorization'] = token
 
               commit('auth_success', {token: token, user: user})
@@ -94,5 +100,6 @@ export default {
   getters: {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
+    getUser: state => state.user
   }
 }
