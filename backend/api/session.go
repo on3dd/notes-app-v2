@@ -35,3 +35,7 @@ func clearSession(response http.ResponseWriter) {
 	}
 	http.SetCookie(response, cookie)
 }
+
+func sessionStatus() {
+
+}

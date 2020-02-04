@@ -29,6 +29,8 @@ func (api *API) SignIn(c *gin.Context) {
 		return
 	}
 
+	user.Id = tempUser.Id
+
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
 	expirationTime := time.Now().Add(5 * time.Minute)
