@@ -30,7 +30,7 @@
         </v-card>
       </v-dialog>
 
-      <v-col :lg="6" :md="8" :sm="10" class="px-2">
+      <v-col :lg="8" :md="8" :sm="10" class="px-2">
         <!--    Title    -->
         <div class="mb-3 text-capitalize">
           <v-text-field
