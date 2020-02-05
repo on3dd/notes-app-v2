@@ -33,6 +33,13 @@ const routes = [
     },
     component: () => import("../views/notes/Note.vue")
   }, {
+    path: "/users",
+    name: "users",
+    meta: {
+      title: "Пользователи"
+    },
+    component: () => import("../views/users/Users.vue")
+  }, {
     path: "/login",
     name: "login",
     meta: {
