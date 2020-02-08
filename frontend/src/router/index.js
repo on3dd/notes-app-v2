@@ -40,6 +40,13 @@ const routes = [
     },
     component: () => import("../views/users/Users.vue")
   }, {
+    path: "/users/:id",
+    name: "user",
+    meta: {
+      title: "Пользователь"
+    },
+    component: () => import("../views/users/User.vue")
+  }, {
     path: "/login",
     name: "login",
     meta: {
