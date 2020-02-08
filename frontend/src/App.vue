@@ -56,7 +56,7 @@
 
     <v-content class="router-view">
       <v-row class="d-flex justify-center">
-        <router-view/>
+        <router-view style="margin: 20px 0"/>
       </v-row>
     </v-content>
 
@@ -95,7 +95,7 @@
         return this.$store.getters.isLoggedIn
       },
       user: function () {
-        return this.$store.getters.getUser
+        return this.$store.getters.getCurrentUser
       },
       user_name: function () {
         const user_name = localStorage.getItem('user_name')
