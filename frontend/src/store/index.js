@@ -6,6 +6,7 @@ import note from "./modules/note";
 import notes from "./modules/notes";
 import user from "./modules/user";
 import user_last_notes from "./modules/user_last_notes";
+import user_favorite_subjects from "./modules/user_favorite_subjects";
 import users from "./modules/users"
 import auth from "./modules/auth";
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     notes,
     user,
     user_last_notes,
+    user_favorite_subjects,
     users,
     auth
   }

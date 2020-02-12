@@ -11,7 +11,7 @@
           </v-col>
 
           <v-col :lg="9" :md="8" class="user-info">
-            <h1 class="display-2 text-truncate mb-2">{{user.name}}</h1>
+            <h1 class="display-2 mb-2">{{user.name}}</h1>
             <div class="title font-weight-regular">
               <span class="d-block mb-2 font-weight-light">{{user.about}}</span>
               <span class="d-block mb-2">
@@ -26,25 +26,35 @@
 
         <v-row>
           <v-card style="width: 100%">
-            <v-tabs background-color="primary" dark v-model="tab">
+            <v-tabs center-active background-color="primary" dark v-model="tab">
               <v-tab>Последние работы</v-tab>
               <v-tab>Избранные предметы</v-tab>
             </v-tabs>
             <v-tabs-items style="width: 100%" v-model="tab">
               <v-tab-item>
-                <v-card flat>
+                <v-card flat v-if="!getUserLastNotes.length">
+                  <v-card-text>Данный пользователь еще не загружал работы.</v-card-text>
+                </v-card>
+                <v-card flat v-else>
                   <v-container>
                     <div :key="index" v-for="(item, index) in getUserLastNotes">
-                      <v-divider v-if="index % 2 === 1"/>
                       <UserProfileRecentNote :note="item"/>
-                      <v-divider v-if="index % 2 === 1"/>
+                      <v-divider v-if="index !== getUserLastNotes.length - 1"/>
                     </div>
                   </v-container>
                 </v-card>
               </v-tab-item>
               <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, sed.</v-card-text>
+                <v-card v-if="!getUserFavoriteSubjects.length" flat>
+                  <v-card-text>Данный пользователь еще не загружал работы.</v-card-text>
+                </v-card>
+                <v-card v-else flat>
+                  <v-container>
+                    <div :key="index" v-for="(item, index) in getUserFavoriteSubjects">
+                      <UserProfileFavoriteSubject :subject="item"/>
+                      <v-divider v-if="index !== getUserFavoriteSubjects.length - 1"/>
+                    </div>
+                  </v-container>
                 </v-card>
               </v-tab-item>
             </v-tabs-items>
@@ -58,32 +68,46 @@
 <script>
   import {mapActions, mapGetters} from "vuex";
   import UserProfileRecentNote from "./UserProfileRecentNote";
+  import UserProfileFavoriteSubject from "./UserProfileFavoriteSubject";
 
   export default {
     name: "UserProfile",
-    components: {UserProfileRecentNote},
+    components: {
+      UserProfileRecentNote,
+      UserProfileFavoriteSubject
+    },
     data() {
       return {
         tab: null
       }
     },
     methods: {
-      ...mapActions(["fetchUser", "fetchUserLastNotes"]),
+      ...mapActions(["fetchUser", "fetchUserLastNotes", "fetchUserFavoriteSubjects"]),
     },
     computed: {
-      ...mapGetters(["getUserLastNotes"]),
+      ...mapGetters(["getUserLastNotes", "getUserFavoriteSubjects"]),
       user: function () {
         return this.$store.getters.getUser
       },
     },
     async mounted() {
       const id = this.$router.currentRoute.params.id
+
       await this.fetchUser(id)
       await this.fetchUserLastNotes(id)
+      await this.fetchUserFavoriteSubjects(id)
+
       console.log(this.getUserLastNotes)
+      console.log(this.getUserFavoriteSubjects)
     }
   }
 </script>
+
+<style>
+  .v-slide-group__prev--disabled {
+    display: none !important;
+  }
+</style>
 
 <style scoped>
   @media screen and (min-device-width: 900px) {
@@ -93,6 +117,11 @@
     }
   }
 
+  @media screen and (max-device-width: 900px){
+    .user-info {
+      text-align: center
+    }
+  }
   .user-info a {
     text-decoration: none;
   }

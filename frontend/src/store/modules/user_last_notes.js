@@ -6,8 +6,7 @@ const options = {
   day: 'numeric',
   timezone: 'UTC',
   hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric'
+  minute: 'numeric'
 };
 
 export default {
