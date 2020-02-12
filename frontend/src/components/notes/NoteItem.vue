@@ -1,6 +1,5 @@
 <template>
-  <v-container
-      class="my-12">
+  <v-container>
     <v-row
         class="mx-md-6 px-2" justify="center" no-gutters>
       <!--    Modal    -->
@@ -30,7 +29,7 @@
         </v-card>
       </v-dialog>
 
-      <v-col :lg="8" :md="8" :sm="10" class="px-2">
+      <v-col :sm="10" class="px-2">
         <!--    Title    -->
         <div class="mb-3 text-capitalize">
           <v-text-field

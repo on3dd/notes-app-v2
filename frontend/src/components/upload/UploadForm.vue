@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <ValidationObserver ref="obs" v-slot="{ invalid, validated, passes, validate }">
-      <v-form id="form" lazy-validation onsubmit="return false;" v-model="valid">
+      <v-form id="form" lazy-validation onsubmit="return false;">
         <span class="display-2 display-sm-3 text-center d-block mb-3">Загрузка работы</span>
 
         <VTextFieldWithValidation :counter="20" label="Название" rules="required|max:20" v-model="title"/>
